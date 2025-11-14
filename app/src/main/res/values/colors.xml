@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary_blue">#00B4D8</color>
+    <color name="secondary_purple">#9038FF</color>
+    <color name="accent_yellow">#FFC300</color>
+    <color name="app_background">#E9ECEF</color>
+
+    <color name="icon_grey">#8A8A8A</color>
+    <color name="text_grey">#6E6E6E</color>
+    <color name="line_grey">#C1C1C1</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
