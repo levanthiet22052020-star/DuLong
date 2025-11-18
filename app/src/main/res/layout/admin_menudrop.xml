@@ -1,0 +1,695 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- ================== 1. HEADER ================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/adminHeaderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#00BCD4"
+        android:elevation="10dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/adminBtnMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/adminSearchBar"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_rounded_grey"
+            android:hint="Tìm kiếm sản phẩm..."
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:singleLine="true"
+            android:textColor="#000000"
+            android:textColorHint="#757575"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/adminBtnSearch"
+            app:layout_constraintStart_toEndOf="@id/adminBtnMenu"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/adminBtnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FFFFFF" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ================== 2. MENU DROPDOWN (MỚI THÊM) ================== -->
+    <!-- Đây là phần menu xổ xuống giống ảnh bạn gửi -->
+    <LinearLayout
+        android:id="@+id/adminMenuDropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rounded_grey"
+        android:elevation="20dp"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="visible"
+        android:weightSum="4"
+        app:layout_constraintTop_toBottomOf="@id/adminHeaderLayout">
+
+        <!-- Cột 1: Vợt -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Vợt"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Yonex"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:textStyle="normal"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Lining"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Vector"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Muzuno"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="VNB"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flypower"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Cột 2: Dây vợt -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Dây vợt"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Yonex"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Lining"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Kizuna"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gosen"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Cột 3: Cầu lông -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Cầu lông"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="VNB"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Vina Star"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="88"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Vector"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Ba Sao"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hải Yến"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Cột 4: Đồ thể thao -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Đồ thể thao"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Áo thể thao"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="Quần thể thao"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quần thể thao"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- ================== 3. NỘI DUNG CHÍNH (Bị Menu đè lên) ================== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/adminBottomNav"
+        app:layout_constraintTop_toBottomOf="@+id/adminHeaderLayout">
+
+        <!-- Nút Thêm Sản Phẩm -->
+        <Button
+            android:id="@+id/adminBtnAddProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#9038FF"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+            app:iconTint="#FFFFFF"
+            android:paddingHorizontal="24dp"
+            android:text="Thêm sản phẩm"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Sản phẩm"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Danh sách cuộn -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/adminProductListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="16dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="#E0E0E0"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/adminImgProduct1"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="#FFFFFF"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_product"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/adminBtnEdit1"
+                            app:layout_constraintStart_toEndOf="@id/adminImgProduct1"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Vợt Yonex Astrox"
+                                android:textColor="#000000"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="2.500.000đ"
+                                android:textColor="#FF0000"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/adminBtnEdit1"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="16dp"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_edit"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/adminBtnDelete1"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#000000" />
+
+                        <ImageView
+                            android:id="@+id/adminBtnDelete1"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_delete"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#000000" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ITEM 2 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="#E0E0E0"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/adminImgProduct2"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="#FFFFFF"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_product"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/adminBtnEdit2"
+                            app:layout_constraintStart_toEndOf="@id/adminImgProduct2"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Giày Lining A3"
+                                android:textColor="#000000"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="1.800.000đ"
+                                android:textColor="#FF0000"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/adminBtnEdit2"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="16dp"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_edit"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/adminBtnDelete2"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#000000" />
+
+                        <ImageView
+                            android:id="@+id/adminBtnDelete2"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_delete"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#000000" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ITEM 3 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="#E0E0E0"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp">
+
+                        <ImageView
+                            android:id="@+id/adminImgProduct3"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="#FFFFFF"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_product"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/adminBtnEdit3"
+                            app:layout_constraintStart_toEndOf="@id/adminImgProduct3"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ống Cầu Lông"
+                                android:textColor="#000000"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="150.000đ"
+                                android:textColor="#FF0000"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/adminBtnEdit3"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="16dp"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_edit"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/adminBtnDelete3"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#000000" />
+
+                        <ImageView
+                            android:id="@+id/adminBtnDelete3"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_delete"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#000000" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- ITEM 4 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardBackgroundColor="#E0E0E0"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
+
+                <ImageView
+                    android:id="@+id/adminImgProduct4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="#FFFFFF"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_product"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/adminBtnEdit4"
+                    app:layout_constraintStart_toEndOf="@id/adminImgProduct4"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dây Cước Cầu Lông"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="120.000đ"
+                        android:textColor="#FF0000"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/adminBtnEdit4"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/adminBtnDelete4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#000000" />
+
+                <ImageView
+                    android:id="@+id/adminBtnDelete4"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="#000000" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+                <!-- Bạn có thể copy thêm ITEM 2, 3, 4 ở đây như file cũ -->
+                <!-- Để ngắn gọn mình chỉ để 1 Item, bạn copy từ file trước vào nhé -->
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+    <!-- ================== 4. BOTTOM NAVIGATION ================== -->
+    <LinearLayout
+        android:id="@+id/adminBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:src="@drawable/ic_house"
+            app:tint="#BBBBBB" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:src="@drawable/ic_notifications_24"
+            app:tint="#BBBBBB" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:src="@drawable/ic_home_24"
+            app:tint="#BBBBBB" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
