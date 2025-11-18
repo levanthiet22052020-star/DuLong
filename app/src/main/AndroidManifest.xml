@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DuLong">
         <activity
+            android:name=".CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ResetPasswordActivity"
             android:exported="false" />
         <activity
