@@ -1,6 +1,9 @@
 package com.example.dulong
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -11,10 +14,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        // Xử lý giao diện edge-to-edge như code cũ của bạn
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // --- ĐOẠN CODE THÊM VÀO ĐỂ CHUYỂN MÀN HÌNH ---
+        // Thời gian chờ là 3000ms (3 giây)
+        Handler(Looper.getMainLooper()).postDelayed({
+            // 1. Tạo Intent để chuyển sang HomeActivity
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+
+            // 2. Đóng Splash Screen lại để người dùng không back về được
+            finish()
+        }, 2000)
+        // ---------------------------------------------
     }
 }
