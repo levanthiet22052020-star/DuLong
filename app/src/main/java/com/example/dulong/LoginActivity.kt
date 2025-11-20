@@ -25,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnLogin: MaterialButton
     private lateinit var tvSignupLink: TextView
     private lateinit var ivPassToggle: ImageView
+    private lateinit var tvForgot: TextView
     private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btn_login)
         tvSignupLink = findViewById(R.id.tv_signup_link)
         ivPassToggle = findViewById(R.id.iv_pass_toggle)
+        tvForgot = findViewById(R.id.tv_forgot)
 
 
         btnLogin.setOnClickListener {
@@ -51,6 +53,11 @@ class LoginActivity : AppCompatActivity() {
 
         tvSignupLink.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        tvForgot.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
 

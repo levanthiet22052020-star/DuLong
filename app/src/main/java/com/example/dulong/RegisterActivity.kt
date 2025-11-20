@@ -57,7 +57,6 @@ class RegisterActivity : AppCompatActivity() {
         btnRegister = findViewById(R.id.btn_register)
         tvLoginLink = findViewById(R.id.tv_login_link)
 
-        // SỬA LỖI 1: Đưa ánh xạ 2 con mắt vào đây luôn để đảm bảo nó được khởi tạo trước khi dùng
         ivPassToggle = findViewById(R.id.iv_pass_toggle)
         ivConfirmPassToggle = findViewById(R.id.iv_confirm_pass_toggle)
     }
@@ -101,7 +100,7 @@ class RegisterActivity : AppCompatActivity() {
             etConfirmPass.setSelection(etConfirmPass.text.length)
         }
     }
-    // SỬA LỖI 2: Xóa dấu ngoặc thừa ở đây, đảm bảo handleRegister nằm trong class
+
 
     private fun handleRegister() {
         val name = etName.text.toString().trim()
@@ -151,4 +150,4 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
     }
-} // Kết thúc class RegisterActivity ở đây
+}

@@ -27,5 +27,17 @@ data class User(
 data class LoginResponse(
     val status: Boolean,
     val message: String,
-    val user: User?
+    val user: User?,
+    val otp: String? // <-- Thêm dòng này để hứng mã OTP từ server
+)
+
+// Gửi số điện thoại và mã OTP người dùng nhập lên server
+data class VerifyOtpRequest(
+    val phone: String,
+    val otp: String
+)
+
+data class ResetPasswordRequest(
+    val phone: String, // Dùng số điện thoại làm định danh (hoặc ID nếu bạn có)
+    val newPassword: String
 )
