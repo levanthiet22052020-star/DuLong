@@ -41,3 +41,22 @@ data class ResetPasswordRequest(
     val phone: String, // Dùng số điện thoại làm định danh (hoặc ID nếu bạn có)
     val newPassword: String
 )
+
+data class Product(
+    val _id: String,
+    val name: String,
+    val price: Double,
+    val image: String?,
+    val weight: String?,
+    val balance: String?,
+    val flex: String?,
+    val description: String?,
+    val type: String?
+)
+
+// Thêm class Response cho list Product
+data class ProductResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Product>
+)
