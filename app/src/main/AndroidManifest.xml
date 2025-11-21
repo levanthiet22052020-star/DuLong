@@ -16,6 +16,21 @@
         android:theme="@style/Theme.DuLong"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".CardActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AdminMenuDropActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".UseryonexActivity"
             android:exported="false" />
         <activity
@@ -26,7 +41,7 @@
             android:exported="false" />
         <activity
             android:name=".CategoryActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".CheckoutActivity"
             android:exported="false" />
@@ -50,13 +65,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>

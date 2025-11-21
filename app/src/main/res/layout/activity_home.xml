@@ -72,6 +72,53 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/categoryOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#C1C1C1"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:weightSum="4"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingEnd="4dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:text="Vợt" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yonex" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lining" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vector" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Muzuno" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="VNB" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Flypower" android:textSize="12sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingEnd="4dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dây vợt" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yonex" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lining" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kizuna" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gosen" android:textSize="12sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingEnd="4dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cầu lông" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="VNB" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vina Star" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vector" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ba Sao" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hải Yến" android:textSize="12sp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingEnd="4dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Đồ TT" android:textColor="#000000" android:textSize="14sp" android:textStyle="bold" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Áo TT" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quần TT" android:textSize="12sp" android:layout_marginBottom="2dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Quần TT" android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
