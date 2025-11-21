@@ -1,5 +1,6 @@
 package com.example.dulong
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View // [Mới] Import View để dùng Visible/Gone
 import android.widget.ImageView // [Mới] Import ImageView
@@ -63,6 +64,8 @@ class HomeActivity : AppCompatActivity() {
             })
 
         val btnMenu = findViewById<ImageView>(R.id.btnMenu)
+        val btnCart = findViewById<ImageView>(R.id.btnCart)
+        val btnProfile = findViewById<ImageView>(R.id.btnProfile)
         val categoryOverlay = findViewById<LinearLayout>(R.id.categoryOverlay)
 
         btnMenu.setOnClickListener {
@@ -73,6 +76,19 @@ class HomeActivity : AppCompatActivity() {
                 categoryOverlay.bringToFront()
             }
         }
+
+        btnCart.setOnClickListener {
+            val intent = Intent(this@HomeActivity, CardActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        btnProfile.setOnClickListener {
+            val intent = Intent(this@HomeActivity, UserProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         categoryOverlay.setOnClickListener {
             categoryOverlay.visibility = View.GONE
         }
