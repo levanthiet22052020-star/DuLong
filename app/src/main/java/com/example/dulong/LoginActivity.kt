@@ -110,10 +110,9 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity, "Đăng nhập thành công!", Toast.LENGTH_LONG).show()
                         Log.d("API_LOG", "Login Success: ${loginResponse.user?.username}")
 
-                        // Chuyển màn hình (Nhớ tạo HomeActivity trước)
-                        //val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                        //startActivity(intent)
-                        //finish()
+                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         // Server trả về false (sai pass, không tìm thấy user...)
                         val msg = loginResponse?.message ?: "Đăng nhập thất bại"
