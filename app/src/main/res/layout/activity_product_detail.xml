@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="Chi tiết sản phẩm" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/purple_500"
+                android:textColor="@color/price_red"
                 android:textSize="20sp"
                 tools:text="1.000.000đ" />
 
