@@ -37,6 +37,7 @@
         <activity android:name=".LoginActivity" android:exported="false" />
         <activity android:name=".AddressListActivity" android:exported="false" />
         <activity android:name=".EditAddressActivity" android:exported="false" />
+        <activity android:name=".ProductDetailActivity" android:exported="false" />
 
         <activity
             android:name=".TrackOrderActivity"

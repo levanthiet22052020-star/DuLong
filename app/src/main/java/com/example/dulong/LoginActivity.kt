@@ -6,6 +6,7 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -16,7 +17,6 @@ import com.google.android.material.button.MaterialButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.ImageView
 
 class LoginActivity : AppCompatActivity() {
 
@@ -26,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var tvSignupLink: TextView
     private lateinit var ivPassToggle: ImageView
     private lateinit var tvForgot: TextView
+
     private var isPasswordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,98 +40,120 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        initViews()
+        addEvents()
+
+        // Kiểm tra xem có dữ liệu từ màn Đăng ký chuyển qua không (để điền sẵn SĐT)
+        val registeredPhone = intent.getStringExtra("register_phone")
+        if (registeredPhone != null) {
+            etUsername.setText(registeredPhone)
+            etPassword.requestFocus() // Chuyển con trỏ xuống ô nhập mật khẩu luôn cho tiện
+        }
+    }
+
+    private fun initViews() {
         etUsername = findViewById(R.id.et_username)
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
         tvSignupLink = findViewById(R.id.tv_signup_link)
         ivPassToggle = findViewById(R.id.iv_pass_toggle)
         tvForgot = findViewById(R.id.tv_forgot)
+    }
 
-
+    private fun addEvents() {
+        // 1. Sự kiện đăng nhập
         btnLogin.setOnClickListener {
             handleLogin()
         }
 
+        // 2. Chuyển sang màn đăng ký
         tvSignupLink.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
+        // 3. Chuyển sang màn quên mật khẩu
         tvForgot.setOnClickListener {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
 
-        setupPasswordToggle()
+        // 4. Ẩn/Hiện mật khẩu
+        ivPassToggle.setOnClickListener {
+            togglePasswordVisibility()
+        }
     }
 
-    private fun setupPasswordToggle() {
-        ivPassToggle.setOnClickListener {
-            if (isPasswordVisible) {
-                // Đang hiện -> Ẩn đi (hiện dấu chấm)
-                etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
-                // Đổi icon mắt (nếu bạn có icon mắt gạch chéo thì thay vào đây)
-                ivPassToggle.setImageResource(R.drawable.ic_eye_24)
-                isPasswordVisible = false
-            } else {
-                // Đang ẩn -> Hiện ra (hiện chữ thường)
-                etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                // Đổi icon mắt (để người dùng biết đang mở)
-                // ivPassToggle.setImageResource(R.drawable.ic_eye_off_24) // Ví dụ nếu có icon gạch chéo
-                isPasswordVisible = true
-            }
-            // Đưa con trỏ về cuối văn bản để gõ tiếp không bị lỗi
-            etPassword.setSelection(etPassword.text.length)
+    private fun togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            // Đang hiện -> Ẩn đi (hiện dấu chấm)
+            etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+            ivPassToggle.setImageResource(R.drawable.ic_eye_24)
+            isPasswordVisible = false
+        } else {
+            // Đang ẩn -> Hiện ra (hiện chữ thường)
+            etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            // ivPassToggle.setImageResource(R.drawable.ic_eye_off_24) // Nếu có icon gạch chéo thì mở dòng này
+            isPasswordVisible = true
         }
+        // Đưa con trỏ về cuối văn bản để gõ tiếp không bị lỗi nhảy về đầu
+        etPassword.setSelection(etPassword.text.length)
     }
 
     private fun handleLogin() {
         val account = etUsername.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
+        // Validate cơ bản
         if (account.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // 1. Thông báo bắt đầu gọi API (để biết nút bấm đã ăn)
-        Toast.makeText(this, "Đang kết nối server...", Toast.LENGTH_SHORT).show()
-        Log.d("API_LOG", "Bắt đầu gửi request: $account")
+        Toast.makeText(this, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
 
         val request = LoginRequest(account, password)
+
+        // Gọi API
         RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                // Log mã phản hồi (200, 400, 500...)
-                Log.d("API_LOG", "Mã phản hồi: ${response.code()}")
-
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse != null && loginResponse.status) {
-                        // --- THÀNH CÔNG ---
-                        Toast.makeText(this@LoginActivity, "Đăng nhập thành công!", Toast.LENGTH_LONG).show()
-                        Log.d("API_LOG", "Login Success: ${loginResponse.user?.username}")
+                        // --- ĐĂNG NHẬP THÀNH CÔNG ---
+                        Toast.makeText(this@LoginActivity, "Xin chào ${loginResponse.user?.username}", Toast.LENGTH_SHORT).show()
 
-                        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                        startActivity(intent)
+                        // --- PHÂN QUYỀN (ROLE) ---
+                        val role = loginResponse.user?.role ?: "user" // Mặc định là user nếu server ko trả về role
+
+                        if (role == "admin") {
+                            // Nếu là Admin -> Sang màn hình Quản lý
+                            Log.d("LOGIN_APP", "User is Admin")
+                            val intent = Intent(this@LoginActivity, AdminProductActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            // Nếu là User thường -> Sang màn hình Trang chủ
+                            Log.d("LOGIN_APP", "User is Customer")
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            startActivity(intent)
+                        }
+
+                        // Đóng màn hình Login để không back lại được
                         finish()
+
                     } else {
-                        // Server trả về false (sai pass, không tìm thấy user...)
+                        // Server trả về false (Sai pass, không tìm thấy user...)
                         val msg = loginResponse?.message ?: "Đăng nhập thất bại"
                         Toast.makeText(this@LoginActivity, msg, Toast.LENGTH_SHORT).show()
-                        Log.e("API_LOG", "Login Failed Logic: $msg")
                     }
                 } else {
-                    // Lỗi HTTP (404 Not Found, 500 Server Error...)
-                    Toast.makeText(this@LoginActivity, "Lỗi server: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    Log.e("API_LOG", "Server Error: ${response.errorBody()?.string()}")
+                    Toast.makeText(this@LoginActivity, "Lỗi Server: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                // Lỗi mạng (không có internet, server tắt, sai IP...)
                 Toast.makeText(this@LoginActivity, "Lỗi kết nối: ${t.message}", Toast.LENGTH_LONG).show()
-                Log.e("API_LOG", "Network Error: ${t.message}")
-                t.printStackTrace()
+                Log.e("LoginError", t.message.toString())
             }
         })
     }

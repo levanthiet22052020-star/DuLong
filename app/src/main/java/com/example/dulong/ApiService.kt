@@ -5,6 +5,10 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Path
+import retrofit2.http.DELETE
+import retrofit2.http.PUT
+
 
 interface ApiService {
 
@@ -28,5 +32,21 @@ interface ApiService {
     fun resetPassword(@Body request: ResetPasswordRequest): Call<LoginResponse>
 
     @GET("products/list")
-    fun getListProduct(@Query("type") type: String): Call<ProductResponse>
+    fun getListProduct(
+        @Query("type") type: String?,
+        @Query("search") search: String?
+    ): Call<ProductResponse>
+
+    @POST("products/add")
+    fun addProduct(@Body product: ProductBody): Call<GeneralResponse>
+
+    @PUT("products/update/{id}")
+    fun updateProduct(@Path("id") id: String, @Body product: ProductBody): Call<GeneralResponse>
+
+    @DELETE("products/delete/{id}")
+    fun deleteProduct(@Path("id") id: String): Call<GeneralResponse>
+
+    // --- CATEGORY API ---
+    @GET("categories/list")
+    fun getListCategory(): Call<CategoryResponse>
 }

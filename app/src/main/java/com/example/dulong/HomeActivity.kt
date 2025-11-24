@@ -35,7 +35,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getProducts(type: String, recyclerView: RecyclerView) {
         // Gọi API thông qua RetrofitClient
-        RetrofitClient.instance.getListProduct(type)
+        RetrofitClient.instance.getListProduct(type, "")
             .enqueue(object : Callback<ProductResponse> {
                 override fun onResponse(
                     call: Call<ProductResponse>,

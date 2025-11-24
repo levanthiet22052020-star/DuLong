@@ -20,6 +20,7 @@ data class User(
     val username: String,
     val phone: String,
     val avatar: String?,
+    val role: String = "user",
     val createdAt: String?
 )
 
@@ -59,4 +60,32 @@ data class ProductResponse(
     val status: Boolean,
     val message: String,
     val data: List<Product>
+)
+
+// Thêm class Category
+data class Category(
+    val _id: String,
+    val name: String
+)
+
+// Class trả về list Category
+data class CategoryResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Category>
+)
+
+// Class body để gửi dữ liệu thêm/sửa sản phẩm (không cần _id)
+data class ProductBody(
+    val name: String,
+    val price: Double,
+    val image: String?,
+    val type: String?
+    // Thêm các trường khác như weight, balance nếu cần...
+)
+
+// Class phản hồi chung (cho Delete/Add/Update)
+data class GeneralResponse(
+    val status: Boolean,
+    val message: String
 )
