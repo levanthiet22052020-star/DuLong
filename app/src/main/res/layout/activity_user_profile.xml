@@ -157,7 +157,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="16dp"
-            android:src="@drawable/ic_home_24"
+            android:src="@drawable/ic_house"
             app:tint="@color/icon_grey"
             xmlns:app="http://schemas.android.com/apk/res-auto"/>
 

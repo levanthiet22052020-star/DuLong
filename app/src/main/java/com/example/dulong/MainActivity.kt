@@ -22,8 +22,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // --- ĐOẠN CODE THÊM VÀO ĐỂ CHUYỂN MÀN HÌNH ---
-        // Thời gian chờ là 3000ms (3 giây)
         Handler(Looper.getMainLooper()).postDelayed({
             // 1. Tạo Intent để chuyển sang HomeActivity
             val intent = Intent(this, LoginActivity::class.java)
