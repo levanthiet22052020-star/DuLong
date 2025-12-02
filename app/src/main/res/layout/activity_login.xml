@@ -128,68 +128,6 @@
                 android:textSize="16sp"
                 app:backgroundTint="@color/secondary_purple"
                 app:cornerRadius="8dp" />
-
-            <LinearLayout
-                android:id="@+id/ll_or_separator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/line_grey" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="Hoặc"
-                    android:textColor="@color/text_grey" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/line_grey" />
-            </LinearLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_google_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:text="Tiếp tục với Google"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/secondary_purple"
-                app:cornerRadius="8dp"
-                app:icon="@drawable/ic_google_logo"
-                app:iconGravity="textStart"
-                app:iconPadding="16dp"
-                app:iconTint="@null" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_facebook_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:text="Tiếp tục với Facebook"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/secondary_purple"
-                app:cornerRadius="8dp"
-                app:icon="@drawable/ic_facebook_logo"
-                app:iconGravity="textStart"
-                app:iconPadding="16dp"
-                app:iconTint="@null" />
-
         </LinearLayout>
     </ScrollView>
 
