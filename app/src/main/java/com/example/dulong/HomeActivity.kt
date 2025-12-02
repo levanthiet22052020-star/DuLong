@@ -3,9 +3,7 @@ package com.example.dulong
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -22,176 +20,186 @@ import retrofit2.Response
 
 class HomeActivity : AppCompatActivity() {
 
-    // View cho trang chủ
+    // --- View Trang Chủ ---
     private lateinit var rcvHot: RecyclerView
     private lateinit var rcvSale: RecyclerView
-    private lateinit var layoutHomeContent: ScrollView
+    private lateinit var scrollHomeContent: ScrollView // Nội dung chính (Hot/Sale)
 
-    // View cho tìm kiếm
+    // --- View Tìm Kiếm / Lọc ---
+    private lateinit var layoutSearchResults: LinearLayout // Khung kết quả tìm kiếm
+    private lateinit var rcvSearchResults: RecyclerView
+    private lateinit var tvSearchResultLabel: TextView
     private lateinit var edtSearch: EditText
     private lateinit var btnSearchIcon: ImageView
-    private lateinit var layoutSearchResult: LinearLayout
-    private lateinit var rcvSearch: RecyclerView
-    private lateinit var tvSearchResultCount: TextView
+
+    // --- Menu & Nav ---
+    private lateinit var categoryOverlay: LinearLayout
+    private lateinit var btnMenu: ImageView
+    private lateinit var btnCart: ImageView
+    private lateinit var btnProfile: ImageView
+    private lateinit var btnHome: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         initViews()
-        setupListeners()
+        setupEvents()
 
-        // Load dữ liệu mặc định cho trang chủ
-        getProducts("hot", rcvHot)
-        getProducts("sale", rcvSale)
+        // Load dữ liệu mặc định (Trang chủ)
+        loadHomeProducts()
     }
 
     private fun initViews() {
-        // Ánh xạ trang chủ
+        // Trang chủ
         rcvHot = findViewById(R.id.rcvHot)
         rcvSale = findViewById(R.id.rcvSale)
-        layoutHomeContent = findViewById(R.id.layoutHomeContent)
+        scrollHomeContent = findViewById(R.id.scrollHomeContent)
 
-        // Ánh xạ tìm kiếm
+        // Tìm kiếm
+        layoutSearchResults = findViewById(R.id.layoutSearchResults)
+        rcvSearchResults = findViewById(R.id.rcvSearchResults)
+        tvSearchResultLabel = findViewById(R.id.tvSearchResultLabel)
         edtSearch = findViewById(R.id.edtSearch)
         btnSearchIcon = findViewById(R.id.btnSearchIcon)
-        layoutSearchResult = findViewById(R.id.layoutSearchResult)
-        rcvSearch = findViewById(R.id.rcvSearch)
-        tvSearchResultCount = findViewById(R.id.tvSearchResultCount)
+
+        // Menu & Nav
+        categoryOverlay = findViewById(R.id.categoryOverlay)
+        btnMenu = findViewById(R.id.btnMenu)
+        btnCart = findViewById(R.id.btnCart)
+        btnProfile = findViewById(R.id.btnProfile)
+        btnHome = findViewById(R.id.btnHome)
     }
 
-    private fun setupListeners() {
-        // 1. Xử lý nút tìm kiếm (Kính lúp)
-        btnSearchIcon.setOnClickListener {
-            val keyword = edtSearch.text.toString().trim()
-            handleSearch(keyword)
-        }
-
-        // 2. Xử lý nút "Search" trên bàn phím ảo
-        edtSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                val keyword = edtSearch.text.toString().trim()
-                handleSearch(keyword)
-                true
-            } else {
-                false
-            }
-        }
-
-        // 3. Navigation và Menu (Giữ code cũ của bạn)
-        val btnMenu = findViewById<ImageView>(R.id.btnMenu)
-        val btnCart = findViewById<ImageView>(R.id.btnCart)
-        val btnProfile = findViewById<ImageView>(R.id.btnProfile)
-        val categoryOverlay = findViewById<LinearLayout>(R.id.categoryOverlay)
-
+    private fun setupEvents() {
+        // 1. Bấm nút Menu (3 gạch) -> Hiện/Ẩn danh mục
         btnMenu.setOnClickListener {
             if (categoryOverlay.visibility == View.VISIBLE) {
                 categoryOverlay.visibility = View.GONE
             } else {
                 categoryOverlay.visibility = View.VISIBLE
-                categoryOverlay.bringToFront()
+                categoryOverlay.bringToFront() // Đưa lên trên cùng
             }
         }
 
-        categoryOverlay.setOnClickListener {
+        // 2. Bấm nút Search -> Tìm theo từ khóa trong ô nhập
+        btnSearchIcon.setOnClickListener {
+            val keyword = edtSearch.text.toString().trim()
+            if (keyword.isNotEmpty()) {
+                performSearch(keyword)
+                hideKeyboard()
+                categoryOverlay.visibility = View.GONE
+            }
+        }
+
+        // 3. Xử lý bấm vào từng Danh mục (Lọc sản phẩm)
+        setupCategoryClick(R.id.cat_yonex, "Yonex")
+        setupCategoryClick(R.id.cat_lining, "Lining")
+        setupCategoryClick(R.id.cat_vector, "Vector")
+        setupCategoryClick(R.id.cat_mizuno, "Mizuno")
+        setupCategoryClick(R.id.cat_flypower, "Flypower")
+
+        setupCategoryClick(R.id.cat_day_yonex, "Dây Yonex")
+        setupCategoryClick(R.id.cat_day_lining, "Dây Lining")
+        setupCategoryClick(R.id.cat_day_kizuna, "Kizuna")
+
+        setupCategoryClick(R.id.cat_cau_vnb, "Cầu VNB")
+        setupCategoryClick(R.id.cat_cau_vinastar, "Vina Star")
+        setupCategoryClick(R.id.cat_cau_basao, "Ba Sao")
+
+        setupCategoryClick(R.id.cat_ao, "Áo")
+        setupCategoryClick(R.id.cat_quan, "Quần")
+
+        // 4. Navigation
+        btnCart.setOnClickListener { startActivity(Intent(this, CardActivity::class.java)) }
+        btnProfile.setOnClickListener { startActivity(Intent(this, UserProfileActivity::class.java)) }
+
+        // Bấm nút Home -> Quay lại trang chủ (Ẩn tìm kiếm)
+        btnHome.setOnClickListener {
+            showHomeLayout()
+        }
+    }
+
+    // Hàm gán sự kiện cho từng dòng danh mục
+    private fun setupCategoryClick(viewId: Int, keyword: String) {
+        findViewById<TextView>(viewId).setOnClickListener {
+            // 1. Điền từ khóa vào ô tìm kiếm để user biết
+            edtSearch.setText(keyword)
+            // 2. Gọi hàm tìm kiếm
+            performSearch(keyword)
+            // 3. Ẩn menu đi
             categoryOverlay.visibility = View.GONE
         }
-
-        btnCart.setOnClickListener {
-            val intent = Intent(this@HomeActivity, CardActivity::class.java)
-            startActivity(intent)
-        }
-
-        btnProfile.setOnClickListener {
-            val intent = Intent(this@HomeActivity, UserProfileActivity::class.java)
-            startActivity(intent)
-        }
     }
 
-    private fun handleSearch(keyword: String) {
-        // Ẩn bàn phím sau khi bấm tìm
-        hideKeyboard()
+    // Hàm thực hiện tìm kiếm/lọc
+    private fun performSearch(keyword: String) {
+        // Ẩn trang chủ, hiện trang kết quả
+        scrollHomeContent.visibility = View.GONE
+        layoutSearchResults.visibility = View.VISIBLE
+        tvSearchResultLabel.text = "Đang tìm kiếm '$keyword'..."
 
-        if (keyword.isEmpty()) {
-            // Nếu ô trống, quay về trang chủ
-            layoutSearchResult.visibility = View.GONE
-            layoutHomeContent.visibility = View.VISIBLE
-            return
-        }
+        // Gọi API: type=null, search=keyword
+        RetrofitClient.instance.getListProduct(null, keyword).enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                if (response.isSuccessful && response.body()?.status == true) {
+                    val list = response.body()!!.data
 
-        // Gọi API tìm kiếm
-        // Tham số type = null (tìm tất cả), search = keyword
-        RetrofitClient.instance.getListProduct(null, keyword)
-            .enqueue(object : Callback<ProductResponse> {
-                override fun onResponse(
-                    call: Call<ProductResponse>,
-                    response: Response<ProductResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val productResponse = response.body()
-                        if (productResponse != null && productResponse.status) {
-                            val listData = productResponse.data
-
-                            // Hiển thị kết quả
-                            showSearchResults(listData)
-                        } else {
-                            Toast.makeText(this@HomeActivity, "Không tìm thấy sản phẩm", Toast.LENGTH_SHORT).show()
-                        }
+                    if (list.isEmpty()) {
+                        tvSearchResultLabel.text = "Không tìm thấy sản phẩm nào cho '$keyword'"
                     } else {
-                        Toast.makeText(this@HomeActivity, "Lỗi server: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        tvSearchResultLabel.text = "Tìm thấy ${list.size} sản phẩm"
                     }
-                }
 
-                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                    Log.e("HomeActivity", "Search Error: ${t.message}")
-                    Toast.makeText(this@HomeActivity, "Lỗi kết nối", Toast.LENGTH_SHORT).show()
+                    // Hiển thị kết quả
+                    val adapter = ProductAdapter(list, this@HomeActivity)
+                    rcvSearchResults.layoutManager = GridLayoutManager(this@HomeActivity, 2)
+                    rcvSearchResults.adapter = adapter
+                } else {
+                    tvSearchResultLabel.text = "Lỗi tìm kiếm"
                 }
-            })
+            }
+
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+                Toast.makeText(this@HomeActivity, "Lỗi kết nối", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    private fun showSearchResults(list: List<Product>) {
-        // Ẩn trang chủ, hiện trang tìm kiếm
-        layoutHomeContent.visibility = View.GONE
-        layoutSearchResult.visibility = View.VISIBLE
-
-        tvSearchResultCount.text = "Tìm thấy ${list.size} sản phẩm"
-
-        // Setup RecyclerView
-        val adapter = ProductAdapter(list, this@HomeActivity)
-        rcvSearch.layoutManager = GridLayoutManager(this@HomeActivity, 2)
-        rcvSearch.adapter = adapter
+    // Hàm quay lại trang chủ
+    private fun showHomeLayout() {
+        layoutSearchResults.visibility = View.GONE
+        scrollHomeContent.visibility = View.VISIBLE
+        edtSearch.setText("") // Xóa ô tìm kiếm
+        hideKeyboard()
     }
 
-    // Hàm ẩn bàn phím ảo
+    // Load dữ liệu ban đầu (Hot & Sale)
+    private fun loadHomeProducts() {
+        loadProductByType("hot", rcvHot)
+        loadProductByType("sale", rcvSale)
+    }
+
+    private fun loadProductByType(type: String, recyclerView: RecyclerView) {
+        // API search rỗng ("") để lấy theo type
+        RetrofitClient.instance.getListProduct(type, "").enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                if (response.isSuccessful && response.body()?.status == true) {
+                    val list = response.body()!!.data
+                    val adapter = ProductAdapter(list, this@HomeActivity)
+                    recyclerView.layoutManager = GridLayoutManager(this@HomeActivity, 2)
+                    recyclerView.adapter = adapter
+                }
+            }
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {}
+        })
+    }
+
     private fun hideKeyboard() {
         val view = this.currentFocus
         if (view != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
-    }
-
-    // Hàm lấy danh sách Hot/Sale (Giữ code cũ)
-    private fun getProducts(type: String, recyclerView: RecyclerView) {
-        RetrofitClient.instance.getListProduct(type, "")
-            .enqueue(object : Callback<ProductResponse> {
-                override fun onResponse(
-                    call: Call<ProductResponse>,
-                    response: Response<ProductResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val productResponse = response.body()
-                        if (productResponse != null && productResponse.status) {
-                            val adapter = ProductAdapter(productResponse.data, this@HomeActivity)
-                            recyclerView.layoutManager = GridLayoutManager(this@HomeActivity, 2)
-                            recyclerView.adapter = adapter
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                    Log.e("HomeActivity", "Lỗi: ${t.message}")
-                }
-            })
     }
 }
