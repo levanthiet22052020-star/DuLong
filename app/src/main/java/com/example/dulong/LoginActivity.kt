@@ -1,5 +1,6 @@
 package com.example.dulong
 
+import android.content.Context // Import cần thiết cho SharedPreferences
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -43,11 +44,10 @@ class LoginActivity : AppCompatActivity() {
         initViews()
         addEvents()
 
-        // Kiểm tra xem có dữ liệu từ màn Đăng ký chuyển qua không (để điền sẵn SĐT)
         val registeredPhone = intent.getStringExtra("register_phone")
         if (registeredPhone != null) {
             etUsername.setText(registeredPhone)
-            etPassword.requestFocus() // Chuyển con trỏ xuống ô nhập mật khẩu luôn cho tiện
+            etPassword.requestFocus()
         }
     }
 
@@ -61,24 +61,20 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun addEvents() {
-        // 1. Sự kiện đăng nhập
         btnLogin.setOnClickListener {
             handleLogin()
         }
 
-        // 2. Chuyển sang màn đăng ký
         tvSignupLink.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        // 3. Chuyển sang màn quên mật khẩu
         tvForgot.setOnClickListener {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
 
-        // 4. Ẩn/Hiện mật khẩu
         ivPassToggle.setOnClickListener {
             togglePasswordVisibility()
         }
@@ -86,17 +82,14 @@ class LoginActivity : AppCompatActivity() {
 
     private fun togglePasswordVisibility() {
         if (isPasswordVisible) {
-            // Đang hiện -> Ẩn đi (hiện dấu chấm)
             etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
             ivPassToggle.setImageResource(R.drawable.ic_eye_24)
             isPasswordVisible = false
         } else {
-            // Đang ẩn -> Hiện ra (hiện chữ thường)
             etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            // ivPassToggle.setImageResource(R.drawable.ic_eye_off_24) // Nếu có icon gạch chéo thì mở dòng này
+            // ivPassToggle.setImageResource(R.drawable.ic_eye_off_24)
             isPasswordVisible = true
         }
-        // Đưa con trỏ về cuối văn bản để gõ tiếp không bị lỗi nhảy về đầu
         etPassword.setSelection(etPassword.text.length)
     }
 
@@ -104,7 +97,6 @@ class LoginActivity : AppCompatActivity() {
         val account = etUsername.text.toString().trim()
         val password = etPassword.text.toString().trim()
 
-        // Validate cơ bản
         if (account.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
             return
@@ -121,28 +113,35 @@ class LoginActivity : AppCompatActivity() {
                     val loginResponse = response.body()
                     if (loginResponse != null && loginResponse.status) {
                         // --- ĐĂNG NHẬP THÀNH CÔNG ---
-                        Toast.makeText(this@LoginActivity, "Xin chào ${loginResponse.user?.username}", Toast.LENGTH_SHORT).show()
 
-                        // --- PHÂN QUYỀN (ROLE) ---
-                        val role = loginResponse.user?.role ?: "user" // Mặc định là user nếu server ko trả về role
+                        val user = loginResponse.user
+
+                        // 1. LƯU ID VÀO BỘ NHỚ (ĐÃ THÊM)
+                        val sharedPreferences = getSharedPreferences("APP_PREFS", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("USER_ID", user?._id)
+                        editor.putString("USER_ROLE", user?.role)
+                        editor.putString("USER_NAME", user?.username)
+                        editor.apply()
+
+                        Toast.makeText(this@LoginActivity, "Xin chào ${user?.username}", Toast.LENGTH_SHORT).show()
+
+                        // 2. Phân quyền (Role)
+                        val role = user?.role ?: "user"
 
                         if (role == "admin") {
-                            // Nếu là Admin -> Sang màn hình Quản lý
                             Log.d("LOGIN_APP", "User is Admin")
                             val intent = Intent(this@LoginActivity, AdminProductActivity::class.java)
                             startActivity(intent)
                         } else {
-                            // Nếu là User thường -> Sang màn hình Trang chủ
                             Log.d("LOGIN_APP", "User is Customer")
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
                         }
 
-                        // Đóng màn hình Login để không back lại được
                         finish()
 
                     } else {
-                        // Server trả về false (Sai pass, không tìm thấy user...)
                         val msg = loginResponse?.message ?: "Đăng nhập thất bại"
                         Toast.makeText(this@LoginActivity, msg, Toast.LENGTH_SHORT).show()
                     }
