@@ -15,42 +15,71 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DuLong"
         android:usesCleartextTraffic="true">
-
-        <!--  ⭐ API KEY ĐÚNG VỊ TRÍ ⭐ -->
+        <activity
+            android:name=".OrderDetailActivity"
+            android:exported="false" />
+        <!-- ⭐ API KEY ĐÚNG VỊ TRÍ ⭐ -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_API_KEY_HERE" />
 
-        <activity android:name=".CardActivity" android:exported="false" />
-        <activity android:name=".AdminProductActivity" android:exported="false" />
-        <activity android:name=".UseryonexActivity" android:exported="false" />
-        <activity android:name=".YonexActivity" android:exported="false" />
-        <activity android:name=".HomeActivity" android:exported="false" />
-        <activity android:name=".CheckoutActivity" android:exported="false" />
-        <activity android:name=".UserProfileActivity" android:exported="false" />
-        <activity android:name=".ResetPasswordActivity" android:exported="false" />
-        <activity android:name=".VerifyOtpActivity" android:exported="false" />
-        <activity android:name=".ForgotPasswordActivity" android:exported="false" />
-        <activity android:name=".RegisterActivity" android:exported="false" />
-        <activity android:name=".LoginActivity" android:exported="false" />
-        <activity android:name=".AddressListActivity" android:exported="false" />
-        <activity android:name=".EditAddressActivity" android:exported="false" />
-        <activity android:name=".ProductDetailActivity" android:exported="false" />
-
+        <activity
+            android:name=".CardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UseryonexActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YonexActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VerifyOtpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddressListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".TrackOrderActivity"
             android:exported="false" />
-
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

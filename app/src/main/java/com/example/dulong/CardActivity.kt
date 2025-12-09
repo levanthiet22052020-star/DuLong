@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import java.text.DecimalFormat
+import android.content.Intent
 
 class CardActivity : AppCompatActivity() {
     private lateinit var btnCheckout: MaterialButton
@@ -59,6 +60,21 @@ class CardActivity : AppCompatActivity() {
                 // CartManager.clearCart()
                 // adapter.notifyDataSetChanged()
                 // updateTotalPrice()
+            }
+        }
+
+        btnCheckout.setOnClickListener {
+            val cartList = CartManager.getCartItems()
+            if (cartList.isEmpty()) {
+                Toast.makeText(this, "Giỏ hàng đang trống!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Chuyển sang màn hình Thông tin đơn hàng
+                val intent = Intent(this, OrderDetailActivity::class.java)
+                startActivity(intent)
+
+                // Tùy chọn: Xóa giỏ hàng sau khi đặt thành công (nếu muốn)
+                // CartManager.clearCart()
+                // finish() // Đóng màn hình giỏ hàng lại
             }
         }
 

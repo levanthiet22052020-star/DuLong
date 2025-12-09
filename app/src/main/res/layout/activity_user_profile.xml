@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#2196F3"
+        android:background="@color/primary_blue"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -20,26 +20,26 @@
             android:id="@+id/iv_settings"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_settings_24"
             app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="Hồ sơ cá nhân"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_centerInParent="true"/>
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_cart"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_cart_24"
             app:tint="@color/white" />
     </RelativeLayout>
@@ -169,7 +169,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đăng xuất"
-            android:backgroundTint="#FF5252"
+            android:backgroundTint="@color/primary_blue"
             android:textColor="#FFFFFF"
             android:layout_marginTop="40dp"/>
 
