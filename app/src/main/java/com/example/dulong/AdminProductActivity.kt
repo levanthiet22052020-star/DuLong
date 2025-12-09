@@ -1,17 +1,17 @@
 package com.example.dulong
 
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -20,102 +20,167 @@ import retrofit2.Response
 
 class AdminProductActivity : AppCompatActivity() {
 
-    private lateinit var rcvCategories: RecyclerView
+    // --- Khai báo View ---
+    private lateinit var btnMenu: ImageView
+    private lateinit var edtSearch: EditText
+    private lateinit var btnSearch: ImageView
+    private lateinit var btnAddProduct: Button
     private lateinit var rcvProducts: RecyclerView
-    private lateinit var adminMenuDropdown: View
 
-    // Adapter
-    private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var productAdapter: ProductAdapter
+    // Phần Menu Dropdown
+    private lateinit var menuDropdown: CardView
+    private lateinit var rcvCategories: RecyclerView
+    private lateinit var bottomNav: LinearLayout
 
-    private val listCategory = mutableListOf<Category>()
-    private val listProduct = mutableListOf<Product>()
+    // Biến dữ liệu
+    private var productList: MutableList<Product> = mutableListOf()
+    private lateinit var adminAdapter: AdminProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_admin_product)
 
-        // Ánh xạ
-        val adminBtnMenu = findViewById<ImageView>(R.id.adminBtnMenu)
-        adminMenuDropdown = findViewById(R.id.adminMenuDropdown)
-        rcvCategories = findViewById(R.id.rcvCategories)
-        rcvProducts = findViewById(R.id.rcvProducts)
-        val btnAddProduct = findViewById<View>(R.id.adminBtnAddProduct) // Nút thêm
+        initViews()
+        setupEvents()
 
-        // 1. Setup RecyclerView Danh mục
-        categoryAdapter = CategoryAdapter(listCategory)
-        rcvCategories.layoutManager = LinearLayoutManager(this)
-        rcvCategories.adapter = categoryAdapter
-
-        // 2. Setup RecyclerView Sản phẩm
-        productAdapter = ProductAdapter(listProduct,
-            onEditClick = { product ->
-                // Bấm sửa -> Gọi hàm hiện Dialog kèm dữ liệu cũ
-                showAddOrUpdateDialog(product)
-            },
-            onDeleteClick = { product ->
-                // Bấm xóa -> Gọi hàm xác nhận xóa
-                confirmDelete(product)
-            }
-        )
-        rcvProducts.layoutManager = LinearLayoutManager(this)
-        rcvProducts.adapter = productAdapter
-
-        // 3. Xử lý click Menu
-        adminBtnMenu.setOnClickListener {
-            if (adminMenuDropdown.visibility == View.VISIBLE) {
-                adminMenuDropdown.visibility = View.GONE
-            } else {
-                adminMenuDropdown.visibility = View.VISIBLE
-                adminMenuDropdown.bringToFront()
-                fetchCategories()
-            }
-        }
-
-        // 4. Xử lý nút Thêm (Gọi hàm Dialog với tham số null)
-        btnAddProduct.setOnClickListener {
-            showAddOrUpdateDialog(null)
-        }
-
-        // Load danh sách ban đầu
-        fetchProducts()
+        // Tải dữ liệu ban đầu
+        loadAllProducts()
+        loadCategories()
     }
 
-    // --- HÀM HIỆN DIALOG THÊM/SỬA ---
-    private fun showAddOrUpdateDialog(product: Product?) {
-        // Tạo Dialog từ file xml dialog_add_product
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_product, null)
+    private fun initViews() {
+        btnMenu = findViewById(R.id.adminBtnMenu)
+        edtSearch = findViewById(R.id.adminSearchBar)
+        btnSearch = findViewById(R.id.adminBtnSearch)
+        btnAddProduct = findViewById(R.id.adminBtnAddProduct)
+        rcvProducts = findViewById(R.id.rcvProducts)
+        menuDropdown = findViewById(R.id.adminMenuDropdown)
+        rcvCategories = findViewById(R.id.rcvCategories)
+        bottomNav = findViewById(R.id.adminBottomNav)
+    }
 
-        val tvTitle = dialogView.findViewById<TextView>(R.id.tvDialogTitle)
+    private fun setupEvents() {
+        // 1. Menu Toggle
+        btnMenu.setOnClickListener {
+            if (menuDropdown.visibility == View.VISIBLE) {
+                menuDropdown.visibility = View.GONE
+            } else {
+                menuDropdown.visibility = View.VISIBLE
+                menuDropdown.bringToFront()
+            }
+        }
+
+        // 2. Tìm kiếm
+        btnSearch.setOnClickListener {
+            val keyword = edtSearch.text.toString().trim()
+            performSearch(keyword, null)
+            hideKeyboard()
+            menuDropdown.visibility = View.GONE
+        }
+
+        // 3. Thêm sản phẩm (Mở Dialog)
+        btnAddProduct.setOnClickListener {
+            showAddProductDialog()
+        }
+
+        // 4. Click ra ngoài để đóng menu
+        rcvProducts.setOnTouchListener { _, _ ->
+            if (menuDropdown.visibility == View.VISIBLE) {
+                menuDropdown.visibility = View.GONE
+            }
+            false
+        }
+    }
+
+    // ==========================================
+    // PHẦN 1: TẢI DỮ LIỆU & TÌM KIẾM
+    // ==========================================
+
+    private fun loadCategories() {
+        RetrofitClient.instance.getCategories().enqueue(object : Callback<CategoryResponse> {
+            override fun onResponse(call: Call<CategoryResponse>, response: Response<CategoryResponse>) {
+                if (response.isSuccessful && response.body()?.status == true) {
+                    val listCat = response.body()!!.data
+
+                    // Xử lý sự kiện khi bấm vào một dòng danh mục
+                    val adapter = CategoryAdapter(listCat) { category ->
+
+                        // 1. Điền tên danh mục vào ô tìm kiếm
+                        edtSearch.setText(category.name)
+
+                        // 2. Ẩn menu dropdown
+                        menuDropdown.visibility = View.GONE
+
+                        // 3. Ẩn bàn phím (để nhìn thấy danh sách ngay)
+                        hideKeyboard()
+
+                        // 4. [QUAN TRỌNG] Gọi tìm kiếm NGAY LẬP TỨC
+                        // Truyền cả tên (keyword) và ID để đảm bảo tìm chính xác nhất
+                        performSearch(category.name, category._id)
+                    }
+
+                    rcvCategories.layoutManager = LinearLayoutManager(this@AdminProductActivity)
+                    rcvCategories.adapter = adapter
+                }
+            }
+            override fun onFailure(call: Call<CategoryResponse>, t: Throwable) { }
+        })
+    }
+
+    private fun loadAllProducts() {
+        performSearch(null, null)
+    }
+
+    private fun performSearch(keyword: String?, categoryId: String?) {
+        RetrofitClient.instance.getListProduct(null, keyword, categoryId).enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                if (response.isSuccessful && response.body()?.status == true) {
+                    productList = response.body()!!.data.toMutableList()
+                    setupRecyclerView(productList)
+                } else {
+                    Toast.makeText(this@AdminProductActivity, "Không tải được dữ liệu", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+                Toast.makeText(this@AdminProductActivity, "Lỗi kết nối: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun setupRecyclerView(list: List<Product>) {
+        adminAdapter = AdminProductAdapter(
+            list,
+            onEdit = { product -> handleEditProduct(product) },
+            onDelete = { product -> confirmDeleteProduct(product) }
+        )
+        rcvProducts.layoutManager = LinearLayoutManager(this@AdminProductActivity)
+        rcvProducts.adapter = adminAdapter
+    }
+
+
+
+    private fun showAddProductDialog() {
+        // Nạp layout dialog
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_product, null)
+
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setView(dialogView)
+        val dialog = builder.create()
+
+        // Ánh xạ view trong dialog
         val edtName = dialogView.findViewById<EditText>(R.id.edtName)
         val edtPrice = dialogView.findViewById<EditText>(R.id.edtPrice)
         val edtImage = dialogView.findViewById<EditText>(R.id.edtImage)
         val edtType = dialogView.findViewById<EditText>(R.id.edtType)
         val btnSave = dialogView.findViewById<Button>(R.id.btnSave)
 
-        // Tạo AlertDialog
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
-
-        // Kiểm tra: Nếu product != null => Là SỬA => Điền sẵn dữ liệu
-        if (product != null) {
-            tvTitle.text = "Cập nhật sản phẩm"
-            edtName.setText(product.name)
-            edtPrice.setText(product.price.toString())
-            edtImage.setText(product.image ?: "")
-            edtType.setText(product.type ?: "normal")
-        } else {
-            tvTitle.text = "Thêm sản phẩm mới"
-        }
-
-        // Xử lý nút Lưu
+        // Sự kiện nút Lưu
         btnSave.setOnClickListener {
-            val name = edtName.text.toString()
-            val priceStr = edtPrice.text.toString()
-            val image = edtImage.text.toString()
-            val type = edtType.text.toString()
+            val name = edtName.text.toString().trim()
+            val priceStr = edtPrice.text.toString().trim()
+            val image = edtImage.text.toString().trim()
+            val type = edtType.text.toString().trim()
 
             if (name.isEmpty() || priceStr.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập tên và giá", Toast.LENGTH_SHORT).show()
@@ -124,149 +189,146 @@ class AdminProductActivity : AppCompatActivity() {
 
             val price = priceStr.toDoubleOrNull() ?: 0.0
 
-            // Tạo đối tượng Body để gửi lên server
-            val body = ProductBody(name, price, image, type)
+            // Tạo object ProductBody
+            val newProduct = ProductBody(name, price, image, type)
 
-            if (product == null) {
-                // --- LOGIC THÊM MỚI ---
-                createProduct(body, dialog)
-            } else {
-                // --- LOGIC CẬP NHẬT ---
-                updateProduct(product._id, body, dialog)
-            }
+            // Gọi API Thêm
+            createProductAPI(newProduct, dialog)
         }
 
         dialog.show()
     }
 
-    // Gọi API Thêm
-    private fun createProduct(body: ProductBody, dialog: AlertDialog) {
-        RetrofitClient.instance.addProduct(body).enqueue(object : Callback<GeneralResponse> {
+    private fun createProductAPI(productBody: ProductBody, dialog: android.app.Dialog) {
+        RetrofitClient.instance.addProduct(productBody).enqueue(object : Callback<GeneralResponse> {
             override fun onResponse(call: Call<GeneralResponse>, response: Response<GeneralResponse>) {
                 if (response.isSuccessful && response.body()?.status == true) {
-                    Toast.makeText(this@AdminProductActivity, "Thêm thành công", Toast.LENGTH_SHORT).show()
-                    fetchProducts() // Load lại danh sách
-                    dialog.dismiss() // Tắt dialog
+                    Toast.makeText(this@AdminProductActivity, "Thêm thành công!", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss() // Đóng popup
+                    loadAllProducts() // Load lại danh sách
                 } else {
-                    Toast.makeText(this@AdminProductActivity, "Thêm thất bại", Toast.LENGTH_SHORT).show()
+                    val msg = response.body()?.message ?: "Thêm thất bại"
+                    Toast.makeText(this@AdminProductActivity, msg, Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onFailure(call: Call<GeneralResponse>, t: Throwable) {
-                Toast.makeText(this@AdminProductActivity, "Lỗi server: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AdminProductActivity, "Lỗi: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    // Gọi API Sửa
-    private fun updateProduct(id: String, body: ProductBody, dialog: AlertDialog) {
-        RetrofitClient.instance.updateProduct(id, body).enqueue(object : Callback<GeneralResponse> {
+    // ==========================================
+    // PHẦN 3: SỬA SẢN PHẨM
+    // ==========================================
+
+    private fun handleEditProduct(product: Product) {
+        showEditProductDialog(product)
+    }
+
+    private fun showEditProductDialog(product: Product) {
+        // Tái sử dụng layout dialog thêm
+        val dialogView = layoutInflater.inflate(R.layout.dialog_add_product, null)
+
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setView(dialogView)
+        val dialog = builder.create()
+
+        // Ánh xạ View
+        val tvTitle = dialogView.findViewById<TextView>(R.id.tvDialogTitle)
+        val edtName = dialogView.findViewById<EditText>(R.id.edtName)
+        val edtPrice = dialogView.findViewById<EditText>(R.id.edtPrice)
+        val edtImage = dialogView.findViewById<EditText>(R.id.edtImage)
+        val edtType = dialogView.findViewById<EditText>(R.id.edtType)
+        val btnSave = dialogView.findViewById<Button>(R.id.btnSave)
+
+        // --- ĐIỀN DỮ LIỆU CŨ ---
+        tvTitle.text = "Cập Nhật Sản Phẩm"
+        btnSave.text = "Cập nhật"
+
+        edtName.setText(product.name)
+        edtPrice.setText(String.format("%.0f", product.price)) // Chuyển số thành chuỗi, bỏ số thập phân thừa
+        edtImage.setText(product.image ?: "")
+        edtType.setText(product.type ?: "")
+
+        // Xử lý nút Cập nhật
+        btnSave.setOnClickListener {
+            val name = edtName.text.toString().trim()
+            val priceStr = edtPrice.text.toString().trim()
+            val image = edtImage.text.toString().trim()
+            val type = edtType.text.toString().trim()
+
+            if (name.isEmpty() || priceStr.isEmpty()) {
+                Toast.makeText(this, "Tên và giá không được để trống", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val price = priceStr.toDoubleOrNull() ?: 0.0
+            val updateBody = ProductBody(name, price, image, type)
+
+            // Gọi API Update
+            updateProductAPI(product._id, updateBody, dialog)
+        }
+
+        dialog.show()
+    }
+
+    private fun updateProductAPI(id: String, productBody: ProductBody, dialog: android.app.Dialog) {
+        Toast.makeText(this, "Đang cập nhật...", Toast.LENGTH_SHORT).show()
+
+        RetrofitClient.instance.updateProduct(id, productBody).enqueue(object : Callback<GeneralResponse> {
             override fun onResponse(call: Call<GeneralResponse>, response: Response<GeneralResponse>) {
                 if (response.isSuccessful && response.body()?.status == true) {
-                    Toast.makeText(this@AdminProductActivity, "Cập nhật thành công", Toast.LENGTH_SHORT).show()
-                    fetchProducts()
+                    Toast.makeText(this@AdminProductActivity, "Cập nhật thành công!", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
+                    loadAllProducts()
                 } else {
-                    Toast.makeText(this@AdminProductActivity, "Cập nhật thất bại", Toast.LENGTH_SHORT).show()
+                    val msg = response.body()?.message ?: "Cập nhật thất bại"
+                    Toast.makeText(this@AdminProductActivity, msg, Toast.LENGTH_SHORT).show()
                 }
             }
+
             override fun onFailure(call: Call<GeneralResponse>, t: Throwable) {
-                Toast.makeText(this@AdminProductActivity, "Lỗi server", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AdminProductActivity, "Lỗi kết nối: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    // --- CÁC HÀM CŨ (GIỮ NGUYÊN) ---
-    private fun fetchCategories() {
-        RetrofitClient.instance.getListCategory().enqueue(object : Callback<CategoryResponse> {
-            override fun onResponse(call: Call<CategoryResponse>, response: Response<CategoryResponse>) {
-                if (response.isSuccessful && response.body()?.status == true) {
-                    listCategory.clear()
-                    response.body()?.data?.let { listCategory.addAll(it) }
-                    categoryAdapter.notifyDataSetChanged()
-                }
-            }
-            override fun onFailure(call: Call<CategoryResponse>, t: Throwable) {}
-        })
-    }
-
-    // --- 2. GỌI API LẤY SẢN PHẨM ---
-    private fun fetchProducts() {
-        // Sửa dòng này: truyền thêm null vào tham số thứ 2
-        // getListProduct(type, search)
-        RetrofitClient.instance.getListProduct(null, null).enqueue(object : Callback<ProductResponse> {
-            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
-                if (response.isSuccessful && response.body()?.status == true) {
-                    listProduct.clear()
-                    response.body()?.data?.let { listProduct.addAll(it) }
-                    productAdapter.notifyDataSetChanged()
-                }
-            }
-            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                Toast.makeText(this@AdminProductActivity, "Lỗi mạng sản phẩm", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun confirmDelete(product: Product) {
-        AlertDialog.Builder(this)
+    private fun confirmDeleteProduct(product: Product) {
+        android.app.AlertDialog.Builder(this)
             .setTitle("Xác nhận xóa")
-            .setMessage("Bạn có chắc muốn xóa ${product.name}?")
+            .setMessage("Bạn có chắc muốn xóa '${product.name}'?")
             .setPositiveButton("Xóa") { _, _ ->
-                RetrofitClient.instance.deleteProduct(product._id).enqueue(object : Callback<GeneralResponse> {
-                    override fun onResponse(call: Call<GeneralResponse>, response: Response<GeneralResponse>) {
-                        if (response.isSuccessful && response.body()?.status == true) {
-                            Toast.makeText(this@AdminProductActivity, "Đã xóa", Toast.LENGTH_SHORT).show()
-                            fetchProducts()
-                        }
-                    }
-                    override fun onFailure(call: Call<GeneralResponse>, t: Throwable) {}
-                })
+                deleteProductAPI(product)
             }
             .setNegativeButton("Hủy", null)
             .show()
     }
 
-    // --- ADAPTERS (GIỮ NGUYÊN NHƯ CŨ) ---
-    inner class CategoryAdapter(private val list: List<Category>) : RecyclerView.Adapter<CategoryAdapter.CatViewHolder>() {
-        inner class CatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val tvName: TextView = view.findViewById(R.id.tvCategoryName)
-        }
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false)
-            return CatViewHolder(view)
-        }
-        override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
-            holder.tvName.text = list[position].name
-        }
-        override fun getItemCount() = list.size
+    private fun deleteProductAPI(product: Product) {
+        // [QUAN TRỌNG] Đã sửa DeleteResponse thành GeneralResponse
+        RetrofitClient.instance.deleteProduct(product._id).enqueue(object : Callback<GeneralResponse> {
+            override fun onResponse(call: Call<GeneralResponse>, response: Response<GeneralResponse>) {
+                if (response.isSuccessful && response.body()?.status == true) {
+                    Toast.makeText(this@AdminProductActivity, response.body()?.message ?: "Đã xóa", Toast.LENGTH_SHORT).show()
+                    loadAllProducts() // Load lại danh sách sau khi xóa
+                } else {
+                    val msg = response.body()?.message ?: "Xóa thất bại"
+                    Toast.makeText(this@AdminProductActivity, msg, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<GeneralResponse>, t: Throwable) {
+                Toast.makeText(this@AdminProductActivity, "Lỗi kết nối: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    inner class ProductAdapter(
-        private val list: List<Product>,
-        private val onEditClick: (Product) -> Unit,
-        private val onDeleteClick: (Product) -> Unit
-    ) : RecyclerView.Adapter<ProductAdapter.ProdViewHolder>() {
-
-        inner class ProdViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val tvName: TextView = view.findViewById(R.id.tvProductName)
-            val tvPrice: TextView = view.findViewById(R.id.tvProductPrice)
-            val btnDelete: ImageView = view.findViewById(R.id.adminBtnDelete)
-            val btnEdit: ImageView = view.findViewById(R.id.adminBtnEdit)
+    // --- TIỆN ÍCH ---
+    private fun hideKeyboard() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProdViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_admin_product, parent, false)
-            return ProdViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ProdViewHolder, position: Int) {
-            val item = list[position]
-            holder.tvName.text = item.name
-            holder.tvPrice.text = "${item.price} đ"
-            holder.btnDelete.setOnClickListener { onDeleteClick(item) }
-            holder.btnEdit.setOnClickListener { onEditClick(item) }
-        }
-
-        override fun getItemCount() = list.size
     }
 }

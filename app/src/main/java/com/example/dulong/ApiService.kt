@@ -35,7 +35,8 @@ interface ApiService {
     @GET("products/list")
     fun getListProduct(
         @Query("type") type: String?,
-        @Query("search") search: String?
+        @Query("search") search: String?,
+        @Query("categoryId") categoryId: String?
     ): Call<ProductResponse>
 
     @POST("products/add")
@@ -49,4 +50,7 @@ interface ApiService {
 
     @GET("categories/list")
     fun getListCategory(): Call<CategoryResponse>
+
+    @GET("categories/list")
+    fun getCategories(): Call<CategoryResponse>
 }

@@ -29,29 +29,27 @@ class ProductAdapter(private val list: List<Product>, private val context: Conte
         val product = list[position]
         holder.tvName.text = product.name
 
-        // Format tiền tệ
+        // Format tiền tệ hiển thị danh sách
         val formatter = DecimalFormat("#,###")
         val formattedPrice = "${formatter.format(product.price)}đ"
         holder.tvPrice.text = formattedPrice
 
-        // Load ảnh bằng Glide
+        // Load ảnh
         Glide.with(context)
             .load(product.image)
-            .placeholder(R.drawable.ic_logo_only)
+            .placeholder(R.drawable.ic_logo_only) // Đảm bảo bạn có ảnh này trong drawable
             .error(R.drawable.ic_logo_only)
             .into(holder.imgProduct)
 
-        // --- BẮT SỰ KIỆN CLICK VÀO SẢN PHẨM ---
+        // --- SỬA ĐỔI CHÍNH Ở ĐÂY ---
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProductDetailActivity::class.java)
-            // Gửi dữ liệu sản phẩm qua activity chi tiết
-            intent.putExtra("PRODUCT_NAME", product.name)
-            intent.putExtra("PRODUCT_PRICE", formattedPrice)
-            intent.putExtra("PRODUCT_IMAGE_URL", product.image)
-            intent.putExtra("PRODUCT_DESCRIPTION", product.description) // Giả sử model Product có trường description
+
+            // Gửi TOÀN BỘ object Product sang màn hình chi tiết
+            intent.putExtra("PRODUCT_DATA", product)
+
             context.startActivity(intent)
         }
-        // -----------------------------------------
     }
 
     override fun getItemCount(): Int = list.size

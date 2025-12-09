@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
+    android:fitsSystemWindows="true"
     tools:context=".HomeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,43 +75,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#E0E0E0"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="12dp"
-        android:weightSum="4"
         android:elevation="12dp"
         android:visibility="gone"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintTop_toBottomOf="@id/headerLayout">
 
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-            <TextView android:text="Vợt" android:textStyle="bold" android:textColor="#000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp"/>
-            <TextView android:id="@+id/cat_yonex" android:text="Yonex" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_lining" android:text="Lining" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_vector" android:text="Vector" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_mizuno" android:text="Muzuno" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_flypower" android:text="Flypower" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn danh mục"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
 
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-            <TextView android:text="Dây vợt" android:textStyle="bold" android:textColor="#000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp"/>
-            <TextView android:id="@+id/cat_day_yonex" android:text="Yonex" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_day_lining" android:text="Lining" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_day_kizuna" android:text="Kizuna" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-            <TextView android:text="Cầu lông" android:textStyle="bold" android:textColor="#000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp"/>
-            <TextView android:id="@+id/cat_cau_vnb" android:text="VNB" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_cau_vinastar" android:text="Vina Star" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_cau_basao" android:text="Ba Sao" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
-            <TextView android:text="Đồ TT" android:textStyle="bold" android:textColor="#000" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp"/>
-            <TextView android:id="@+id/cat_ao" android:text="Áo TT" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-            <TextView android:id="@+id/cat_quan" android:text="Quần TT" android:padding="4dp" android:textSize="12sp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

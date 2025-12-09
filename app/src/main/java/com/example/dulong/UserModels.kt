@@ -1,16 +1,21 @@
 package com.example.dulong
+import java.io.Serializable
 
-// ... Giữ nguyên các class cũ (LoginRequest, RegisterRequest, v.v.) ...
+// 1. Gửi lên Server khi Login
+data class LoginRequest(
+    val account: String,
+    val password: String
+)
 
-data class LoginRequest(val account: String, val password: String)
-
+// 2. Gửi lên Server khi Register (Thêm cái này)
 data class RegisterRequest(
-    val username: String,
+    val username: String, // Phải khớp tên biến server NodeJS yêu cầu
     val phone: String,
     val password: String,
     val confirmPassword: String
 )
 
+// 3. Thông tin User
 data class User(
     val _id: String,
     val username: String,
@@ -20,26 +25,75 @@ data class User(
     val createdAt: String?
 )
 
+data class UpdateProfileRequest(
+    val username: String
+)
+
+// 4. Phản hồi chung từ Server (Dùng chung cho cả Login và Register)
 data class LoginResponse(
     val status: Boolean,
     val message: String,
     val user: User?,
-    val otp: String?
+    val otp: String? // <-- Thêm dòng này để hứng mã OTP từ server
 )
 
-data class VerifyOtpRequest(val phone: String, val otp: String)
-data class ResetPasswordRequest(val phone: String, val newPassword: String)
-
-// --- MỚI THÊM: Class gửi yêu cầu đổi tên ---
-data class UpdateProfileRequest(
-    val newUsername: String
+// Gửi số điện thoại và mã OTP người dùng nhập lên server
+data class VerifyOtpRequest(
+    val phone: String,
+    val otp: String
 )
-// ------------------------------------------
 
-// ... Giữ nguyên các class Product/Category bên dưới ...
-data class Product(val _id: String, val name: String, val price: Double, val image: String?, val weight: String?, val balance: String?, val flex: String?, val description: String?, val type: String?)
-data class ProductResponse(val status: Boolean, val message: String, val data: List<Product>)
-data class Category(val _id: String, val name: String)
-data class CategoryResponse(val status: Boolean, val message: String, val data: List<Category>)
-data class ProductBody(val name: String, val price: Double, val image: String?, val type: String?)
-data class GeneralResponse(val status: Boolean, val message: String)
+data class ResetPasswordRequest(
+    val phone: String, // Dùng số điện thoại làm định danh (hoặc ID nếu bạn có)
+    val newPassword: String
+)
+
+data class Product(
+    val _id: String,
+    val name: String,
+    val price: Double,
+    val image: String?,
+    val weight: String?,
+    val balance: String?,
+    val flex: String?,
+    val description: String?,
+    val type: String?,
+    val color: String? = null,
+    val quantity: Int = 0,
+) : Serializable
+
+
+// Thêm class Response cho list Product
+data class ProductResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Product>
+)
+
+// Thêm class Category
+data class Category(
+    val _id: String,
+    val name: String
+)
+
+// Class trả về list Category
+data class CategoryResponse(
+    val status: Boolean,
+    val message: String,
+    val data: List<Category>
+)
+
+// Class body để gửi dữ liệu thêm/sửa sản phẩm (không cần _id)
+data class ProductBody(
+    val name: String,
+    val price: Double,
+    val image: String?,
+    val type: String?
+    // Thêm các trường khác như weight, balance nếu cần...
+)
+
+// Class phản hồi chung (cho Delete/Add/Update)
+data class GeneralResponse(
+    val status: Boolean,
+    val message: String
+)
