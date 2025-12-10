@@ -16,9 +16,14 @@
         android:theme="@style/Theme.DuLong"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activity.user.OrderDetailActivity"
+            android:name=".activity.auth.ChangePasswordActivity"
             android:exported="false" />
-        <!-- ⭐ API KEY ĐÚNG VỊ TRÍ ⭐ -->
+        <activity
+            android:name=".activity.user.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.user.OrderDetailActivity"
+            android:exported="false" /> <!-- ⭐ API KEY ĐÚNG VỊ TRÍ ⭐ -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_API_KEY_HERE" />
@@ -28,9 +33,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.admin.AdminProductActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.product.UseryonexActivity"
             android:exported="false" />
         <activity
             android:name=".activity.product.YonexActivity"

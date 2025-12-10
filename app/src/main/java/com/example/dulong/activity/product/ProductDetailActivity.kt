@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.dulong.activity.cart.CardActivity
+import com.example.dulong.activity.cart.CardActivity // Hoặc CardActivity tùy tên file của bạn
 import com.example.dulong.activity.utils.CartManager
 import com.example.dulong.R
 import com.example.dulong.model.Product
@@ -55,8 +55,11 @@ class ProductDetailActivity : AppCompatActivity() {
             tvFlex.text = "Độ cứng: ${product.flex ?: "..."}"
             tvColor.text = "Màu sắc: ${product.color ?: "..."}"
 
-            if (product.quantity > 0) {
-                tvQuantity.text = "Kho: ${product.quantity}"
+            // Kiểm tra số lượng tồn kho (giả sử > 0 là còn hàng)
+            // Lưu ý: Trong CartManager ta dùng 'quantity' là số lượng mua
+            // Còn ở đây product.quantity có thể hiểu là tồn kho nếu API trả về
+            if (product.quantity >= 0) {
+                tvQuantity.text = "Tình trạng: Còn hàng"
                 btnAddToCart.isEnabled = true
             } else {
                 tvQuantity.text = "Hết hàng"
@@ -64,7 +67,10 @@ class ProductDetailActivity : AppCompatActivity() {
                 btnAddToCart.text = "Hết hàng"
             }
 
-            Glide.with(this).load(product.image).placeholder(R.drawable.ic_logo_only).into(ivImage)
+            Glide.with(this)
+                .load(product.image)
+                .placeholder(R.drawable.ic_logo_only)
+                .into(ivImage)
 
             // 3. Xử lý thêm vào giỏ
             btnAddToCart.setOnClickListener {
@@ -77,13 +83,7 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
     private fun addToCart(product: Product) {
-        // Lưu vào Singleton
-        CartManager.addProduct(product)
-
+        CartManager.addToCart(product)
         Toast.makeText(this, "Đã thêm vào giỏ hàng!", Toast.LENGTH_SHORT).show()
-
-        // Chuyển sang màn hình Giỏ hàng
-        val intent = Intent(this, CardActivity::class.java)
-        startActivity(intent)
     }
 }

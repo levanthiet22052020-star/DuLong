@@ -149,7 +149,7 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.makeText(this@RegisterActivity, msg, Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@RegisterActivity, "Lỗi Server: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "Tên đã có người sử dụng ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
             }
 

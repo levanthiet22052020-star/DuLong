@@ -127,52 +127,6 @@
                 android:src="@drawable/ic_arrow_forward_24"
                 app:tint="#000000" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_address_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:background="#E0E0E0"
-            android:padding="16dp"
-            android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_location_on_24"
-                app:tint="#000000" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="Địa Chỉ"
-                android:textColor="#000000"
-                android:textStyle="bold"
-                android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/btnEdit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_forward_24"
-                app:tint="#000000" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đăng xuất"
-            android:backgroundTint="@color/primary_blue"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="40dp"/>
-
     </LinearLayout>
 
     <LinearLayout

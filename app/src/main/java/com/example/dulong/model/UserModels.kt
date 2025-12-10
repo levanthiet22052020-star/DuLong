@@ -59,7 +59,7 @@ data class Product(
     val description: String?,
     val type: String?,
     val color: String? = null,
-    val quantity: Int = 0,
+    var quantity: Int = 1,
 ) : Serializable
 
 

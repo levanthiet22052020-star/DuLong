@@ -123,9 +123,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Hàm gọi API lấy danh sách Danh Mục
-     */
     private fun loadCategories() {
         RetrofitClient.instance.getCategories().enqueue(object : Callback<CategoryResponse> {
             override fun onResponse(call: Call<CategoryResponse>, response: Response<CategoryResponse>) {

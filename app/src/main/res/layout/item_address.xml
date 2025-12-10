@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#E0E0E0"
-    android:padding="10dp">
-
-    <!-- Dòng 1: Tên + SĐT -->
+    android:padding="12dp"
+    android:background="@drawable/bg_white_rounded"
+    android:layout_marginBottom="8dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tvName"
@@ -18,41 +18,44 @@
             android:layout_height="wrap_content"
             android:text="Nguyễn Văn A"
             android:textStyle="bold"
-            android:textColor="#000000"
-            android:textSize="14sp" />
+            android:textSize="16sp"
+            android:textColor="#000000"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="|"
-            android:textSize="14sp"
-            android:textColor="#000000" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            android:background="#BDBDBD"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
 
         <TextView
             android:id="@+id/tvPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="(+84) 123456789"
-            android:textSize="14sp"
-            android:textColor="#000000" />
+            android:text="0912345678"
+            android:textColor="#616161"/>
     </LinearLayout>
 
-    <!-- Dòng 2: Địa chỉ -->
     <TextView
         android:id="@+id/tvAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Số 123, Đường ABC, Quận XYZ, TP.HCM"
+        android:textColor="#424242"
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Số nhà 32/11, Đường ABC, Phường 4, Quận 12, Thành Phố Hồ Chí Minh"
-        android:textSize="14sp"
-        android:textColor="#000000" />
-
-    <!-- Đường kẻ chia item -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="#BDBDBD" />
+        android:text="Mặc định"
+        android:textColor="#F44336"
+        android:background="@drawable/bg_edittext"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:textSize="12sp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
 </LinearLayout>

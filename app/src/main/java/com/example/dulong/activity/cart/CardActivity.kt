@@ -1,5 +1,6 @@
 package com.example.dulong.activity.cart
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,13 +11,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dulong.R
+import com.example.dulong.activity.utils.CartManager
+import com.example.dulong.adapter.CartAdapter
 import com.google.android.material.button.MaterialButton
 import java.text.DecimalFormat
-import android.content.Intent
-import com.example.dulong.activity.utils.CartManager
-import com.example.dulong.activity.user.OrderDetailActivity
-import com.example.dulong.R
-import com.example.dulong.adapter.CartAdapter
 
 class CardActivity : AppCompatActivity() {
     private lateinit var btnCheckout: MaterialButton
@@ -36,53 +35,39 @@ class CardActivity : AppCompatActivity() {
         rvCart = findViewById(R.id.rvCart)
         tvTotalAmount = findViewById(R.id.tvTotalAmount)
 
-        // 2. Thiết lập RecyclerView
-        // Lấy danh sách từ CartManager
+        // 2. Lấy dữ liệu từ CartManager
         val cartList = CartManager.getCartItems()
 
-        adapter = CartAdapter(cartList)
+        // 3. Khởi tạo Adapter với Callback
+        // Callback này sẽ được gọi mỗi khi user bấm + hoặc - trong Adapter
+        adapter = CartAdapter(cartList) {
+            // Khi số lượng thay đổi -> Tính lại tổng tiền và hiển thị
+            updateTotalPrice()
+        }
+
         rvCart.layoutManager = LinearLayoutManager(this)
         rvCart.adapter = adapter
 
-        // 3. Cập nhật tổng tiền
+        // 4. Tính tổng tiền lần đầu khi mở màn hình
         updateTotalPrice()
 
-        // 4. Xử lý nút Back
+        // 5. Xử lý nút Back
         btnBack.setOnClickListener {
-            finish() // Đóng Activity để quay lại màn hình trước
+            finish()
         }
 
-        // 5. Nút Mua hàng
+        // 6. Xử lý nút MUA HÀNG
         btnCheckout.setOnClickListener {
             if (cartList.isEmpty()) {
                 Toast.makeText(this, "Giỏ hàng đang trống!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Đặt hàng thành công!", Toast.LENGTH_SHORT).show()
-                // Xử lý logic đặt hàng ở đây (gọi API...)
-
-                // Sau khi mua xong có thể xóa giỏ hàng
-                // CartManager.clearCart()
-                // adapter.notifyDataSetChanged()
-                // updateTotalPrice()
-            }
-        }
-
-        btnCheckout.setOnClickListener {
-            val cartList = CartManager.getCartItems()
-            if (cartList.isEmpty()) {
-                Toast.makeText(this, "Giỏ hàng đang trống!", Toast.LENGTH_SHORT).show()
-            } else {
-                // Chuyển sang màn hình Thông tin đơn hàng
-                val intent = Intent(this, OrderDetailActivity::class.java)
+                // Chuyển sang màn hình Thanh toán (CheckoutActivity)
+                val intent = Intent(this, CheckoutActivity::class.java)
                 startActivity(intent)
-
-                // Tùy chọn: Xóa giỏ hàng sau khi đặt thành công (nếu muốn)
-                // CartManager.clearCart()
-                // finish() // Đóng màn hình giỏ hàng lại
             }
         }
 
-        // Xử lý giao diện tràn viền
+        // Xử lý giao diện Edge-to-Edge
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -90,6 +75,7 @@ class CardActivity : AppCompatActivity() {
         }
     }
 
+    // Hàm cập nhật text tổng tiền lên giao diện
     private fun updateTotalPrice() {
         val total = CartManager.getTotalPrice()
         val formatter = DecimalFormat("#,###")

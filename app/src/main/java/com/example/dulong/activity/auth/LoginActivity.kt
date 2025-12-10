@@ -127,6 +127,7 @@ class LoginActivity : AppCompatActivity() {
                         editor.putString("USER_ID", user?._id)
                         editor.putString("USER_ROLE", user?.role)
                         editor.putString("USER_NAME", user?.username)
+                        editor.putString("USER_PHONE", user?.phone)
                         editor.apply()
 
                         Toast.makeText(this@LoginActivity, "Xin chào ${user?.username}", Toast.LENGTH_SHORT).show()
