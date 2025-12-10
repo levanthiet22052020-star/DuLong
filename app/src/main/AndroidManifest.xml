@@ -16,7 +16,7 @@
         android:theme="@style/Theme.DuLong"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".OrderDetailActivity"
+            android:name=".activity.user.OrderDetailActivity"
             android:exported="false" />
         <!-- ⭐ API KEY ĐÚNG VỊ TRÍ ⭐ -->
         <meta-data
@@ -24,55 +24,55 @@
             android:value="YOUR_API_KEY_HERE" />
 
         <activity
-            android:name=".CardActivity"
+            android:name=".activity.cart.CardActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminProductActivity"
+            android:name=".activity.admin.AdminProductActivity"
             android:exported="false" />
         <activity
-            android:name=".UseryonexActivity"
+            android:name=".activity.product.UseryonexActivity"
             android:exported="false" />
         <activity
-            android:name=".YonexActivity"
+            android:name=".activity.product.YonexActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".CheckoutActivity"
+            android:name=".activity.cart.CheckoutActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".activity.user.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".activity.auth.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".VerifyOtpActivity"
+            android:name=".activity.auth.VerifyOtpActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".activity.auth.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activity.auth.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activity.auth.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".AddressListActivity"
+            android:name=".activity.user.AddressListActivity"
             android:exported="false" />
         <activity
-            android:name=".EditAddressActivity"
+            android:name=".activity.user.EditAddressActivity"
             android:exported="false" />
         <activity
-            android:name=".ProductDetailActivity"
+            android:name=".activity.product.ProductDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".TrackOrderActivity"
+            android:name=".activity.user.TrackOrderActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

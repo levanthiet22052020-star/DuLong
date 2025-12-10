@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="#FFFFFF"
     android:fitsSystemWindows="true"
-    tools:context=".ProductDetailActivity">
+    tools:context=".activity.product.ProductDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

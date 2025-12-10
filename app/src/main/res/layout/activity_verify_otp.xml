@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/app_background"
-    tools:context=".VerifyOtpActivity">
+    tools:context=".activity.auth.VerifyOtpActivity">
 
 
     <com.google.android.material.appbar.AppBarLayout
