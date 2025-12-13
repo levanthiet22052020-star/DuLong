@@ -1,5 +1,6 @@
 package com.example.dulong.activity.user;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import com.example.dulong.adapter.AddressAdapter;
 import com.example.dulong.api.RetrofitClient;
 import com.example.dulong.model.AddressListResponse;
 import com.example.dulong.model.AddressModel;
+import com.example.dulong.model.GeneralResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,17 +50,31 @@ public class AddressListActivity extends AppCompatActivity {
         recycler.setLayoutManager(new LinearLayoutManager(this));
         list = new ArrayList<>();
 
-        // Adapter: Khi bấm vào item -> Mở màn hình sửa
-        adapter = new AddressAdapter(list, new AddressAdapter.OnItemClickListener() {
+        // Adapter với các chức năng sửa, xóa, đặt mặc định
+        adapter = new AddressAdapter(list, new AddressAdapter.OnAddressActionListener() {
             @Override
-            public void onItemClick(AddressModel model) {
+            public void onEditAddress(AddressModel model) {
                 Intent i = new Intent(AddressListActivity.this, EditAddressActivity.class);
                 i.putExtra("mode", "edit");
-                i.putExtra("id", model.getId());      // Truyền ID để biết sửa cái nào
-                i.putExtra("name", model.getName());
+                i.putExtra("id", model.getId());
+                i.putExtra("name", model.getFullName() != null ? model.getFullName() : model.getName());
                 i.putExtra("phone", model.getPhone());
                 i.putExtra("address", model.getAddress());
+                i.putExtra("ward", model.getWard());
+                i.putExtra("district", model.getDistrict());
+                i.putExtra("province", model.getProvince());
+                i.putExtra("isDefault", model.isDefault());
                 startActivity(i);
+            }
+
+            @Override
+            public void onDeleteAddress(AddressModel model) {
+                showDeleteConfirmDialog(model);
+            }
+
+            @Override
+            public void onSetDefaultAddress(AddressModel model) {
+                setDefaultAddress(model.getId());
             }
         });
         recycler.setAdapter(adapter);
@@ -98,9 +114,8 @@ public class AddressListActivity extends AppCompatActivity {
             return;
         }
 
-        // Gọi API lấy danh sách
-        // === ĐÃ SỬA LỖI TẠI ĐÂY (Thêm .INSTANCE) ===
-        RetrofitClient.INSTANCE.getInstance().getAddresses(userId).enqueue(new Callback<AddressListResponse>() {
+        // Gọi API lấy danh sách địa chỉ mới
+        RetrofitClient.getInstance().getUserAddresses(userId).enqueue(new Callback<AddressListResponse>() {
             @Override
             public void onResponse(Call<AddressListResponse> call, Response<AddressListResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -117,6 +132,57 @@ public class AddressListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<AddressListResponse> call, Throwable t) {
                 Toast.makeText(AddressListActivity.this, "Lỗi tải dữ liệu: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDeleteConfirmDialog(AddressModel model) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc chắn muốn xóa địa chỉ này?")
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    deleteAddress(model.getId());
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void deleteAddress(String addressId) {
+        RetrofitClient.getInstance().deleteUserAddress(addressId).enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                    Toast.makeText(AddressListActivity.this, "Đã xóa địa chỉ!", Toast.LENGTH_SHORT).show();
+                    getListAddress(); // Reload danh sách
+                } else {
+                    String message = response.body() != null ? response.body().getMessage() : "Xóa thất bại!";
+                    Toast.makeText(AddressListActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
+                Toast.makeText(AddressListActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setDefaultAddress(String addressId) {
+        RetrofitClient.getInstance().setDefaultAddress(addressId).enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                    Toast.makeText(AddressListActivity.this, "Đã đặt làm địa chỉ mặc định!", Toast.LENGTH_SHORT).show();
+                    getListAddress(); // Reload danh sách
+                } else {
+                    String message = response.body() != null ? response.body().getMessage() : "Cập nhật thất bại!";
+                    Toast.makeText(AddressListActivity.this, message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GeneralResponse> call, Throwable t) {
+                Toast.makeText(AddressListActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

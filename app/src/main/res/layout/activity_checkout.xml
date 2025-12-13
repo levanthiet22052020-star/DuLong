@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
@@ -52,7 +51,7 @@
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/ic_location_on_24"
+                        android:src="@drawable/ic_location"
                         app:tint="#F44336"
                         android:layout_gravity="center_vertical"/>
 
@@ -167,7 +166,7 @@
                         android:id="@+id/rbOnline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="CHuyển khoản qua mã QR"/>
+                        android:text="Thanh toán Online (Ví/Thẻ)"/>
                 </RadioGroup>
             </LinearLayout>
 
@@ -301,7 +300,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Đặt hàng"
-            android:backgroundTint="#FF5722"
+            android:backgroundTint="@color/secondary_purple"
             android:textColor="#FFFFFF"/>
     </LinearLayout>
 </RelativeLayout>

@@ -16,6 +16,21 @@
         android:theme="@style/Theme.DuLong"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.admin.AdminCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.admin.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.admin.AdminOrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.admin.RevenueStatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.user.OrderHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.auth.ChangePasswordActivity"
             android:exported="false" />
         <activity
@@ -34,9 +49,7 @@
         <activity
             android:name=".activity.admin.AdminProductActivity"
             android:exported="false" />
-        <activity
-            android:name=".activity.product.YonexActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activity.HomeActivity"
             android:exported="false" />

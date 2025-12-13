@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DuLong</string>
+    <!-- Web Client ID từ Google Console -->
+    <string name="default_web_client_id">214423269445-h7tnkk0d89utd5uoltc0eus7vntlnug.apps.googleusercontent.com</string>
 </resources>

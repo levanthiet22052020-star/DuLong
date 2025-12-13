@@ -10,7 +10,10 @@ public class AddressModel implements Serializable {
     @SerializedName("userId")
     private String userId;
 
-    @SerializedName("name")
+    @SerializedName("fullName")
+    private String fullName;
+
+    @SerializedName("name") // Backward compatibility
     private String name;
 
     @SerializedName("phone")
@@ -18,6 +21,15 @@ public class AddressModel implements Serializable {
 
     @SerializedName("address")
     private String address;
+
+    @SerializedName("ward")
+    private String ward;
+
+    @SerializedName("district")
+    private String district;
+
+    @SerializedName("province")
+    private String province;
 
     @SerializedName("isDefault")
     private boolean isDefault;
@@ -27,11 +39,15 @@ public class AddressModel implements Serializable {
     }
 
     // Constructor đầy đủ để gửi lên Server
-    public AddressModel(String userId, String name, String phone, String address, boolean isDefault) {
+    public AddressModel(String userId, String fullName, String phone, String address, 
+                       String ward, String district, String province, boolean isDefault) {
         this.userId = userId;
-        this.name = name;
+        this.fullName = fullName;
         this.phone = phone;
         this.address = address;
+        this.ward = ward;
+        this.district = district;
+        this.province = province;
         this.isDefault = isDefault;
     }
 
@@ -52,8 +68,16 @@ public class AddressModel implements Serializable {
         this.userId = userId;
     }
 
+    public String getFullName() {
+        return fullName != null ? fullName : name;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getName() {
-        return name;
+        return name != null ? name : fullName;
     }
 
     public void setName(String name) {
@@ -76,11 +100,56 @@ public class AddressModel implements Serializable {
         this.address = address;
     }
 
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public boolean isDefault() {
         return isDefault;
     }
 
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    // Helper method để lấy địa chỉ đầy đủ
+    public String getFullAddress() {
+        StringBuilder sb = new StringBuilder();
+        if (address != null && !address.isEmpty()) {
+            sb.append(address);
+        }
+        if (ward != null && !ward.isEmpty()) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(ward);
+        }
+        if (district != null && !district.isEmpty()) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(district);
+        }
+        if (province != null && !province.isEmpty()) {
+            if (sb.length() > 0) sb.append(", ");
+            sb.append(province);
+        }
+        return sb.toString();
     }
 }

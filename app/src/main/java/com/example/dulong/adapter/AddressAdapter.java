@@ -10,21 +10,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dulong.R;
 import com.example.dulong.model.AddressModel;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
 
     private List<AddressModel> list;
-    private OnItemClickListener listener; // Biến lưu listener
+    private OnAddressActionListener listener;
 
-    // 1. ĐỊNH NGHĨA INTERFACE (Đây là phần bạn đang thiếu)
-    public interface OnItemClickListener {
-        void onItemClick(AddressModel model);
+    // Interface cho các hành động với địa chỉ
+    public interface OnAddressActionListener {
+        void onEditAddress(AddressModel model);
+        void onDeleteAddress(AddressModel model);
+        void onSetDefaultAddress(AddressModel model);
     }
 
-    // 2. Constructor nhận vào List và Listener
-    public AddressAdapter(List<AddressModel> list, OnItemClickListener listener) {
+    // Constructor
+    public AddressAdapter(List<AddressModel> list, OnAddressActionListener listener) {
         this.list = list;
         this.listener = listener;
     }
@@ -43,24 +46,40 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
         if (model == null) return;
 
-        holder.tvName.setText(model.getName());
-        holder.tvPhone.setText(model.getPhone());
-        holder.tvAddress.setText(model.getAddress());
+        // Hiển thị thông tin địa chỉ
+        String displayName = model.getFullName() != null ? model.getFullName() : model.getName();
+        holder.tvName.setText(displayName != null ? displayName : "Địa chỉ");
+        holder.tvCustomerName.setText(displayName != null ? displayName : "");
+        holder.tvPhone.setText("• " + model.getPhone());
+        holder.tvAddress.setText(model.getFullAddress());
 
         // Hiển thị nhãn "Mặc định" nếu có
         if (model.isDefault()) {
             holder.tvDefault.setVisibility(View.VISIBLE);
+            holder.btnSetDefault.setVisibility(View.GONE);
         } else {
             holder.tvDefault.setVisibility(View.GONE);
+            holder.btnSetDefault.setVisibility(View.VISIBLE);
         }
 
-        // 3. BẮT SỰ KIỆN CLICK VÀO CẢ DÒNG (ItemView)
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemClick(model); // Gọi hàm của interface
-                }
+        // Sự kiện nút Sửa
+        holder.btnEdit.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onEditAddress(model);
+            }
+        });
+
+        // Sự kiện nút Xóa
+        holder.btnDelete.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onDeleteAddress(model);
+            }
+        });
+
+        // Sự kiện nút Đặt Mặc Định
+        holder.btnSetDefault.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSetDefaultAddress(model);
             }
         });
     }
@@ -72,14 +91,19 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvPhone, tvAddress, tvDefault;
+        TextView tvName, tvCustomerName, tvPhone, tvAddress, tvDefault;
+        MaterialButton btnEdit, btnDelete, btnSetDefault;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvPhone = itemView.findViewById(R.id.tvPhone);
-            tvAddress = itemView.findViewById(R.id.tvAddress);
-            tvDefault = itemView.findViewById(R.id.tvDefault);
+            tvName = itemView.findViewById(R.id.tvAddressName);
+            tvCustomerName = itemView.findViewById(R.id.tvCustomerName);
+            tvPhone = itemView.findViewById(R.id.tvCustomerPhone);
+            tvAddress = itemView.findViewById(R.id.tvFullAddress);
+            tvDefault = itemView.findViewById(R.id.tvDefaultBadge);
+            btnEdit = itemView.findViewById(R.id.btnEditAddress);
+            btnDelete = itemView.findViewById(R.id.btnDeleteAddress);
+            btnSetDefault = itemView.findViewById(R.id.btnSetDefault);
         }
     }
 }

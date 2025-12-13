@@ -62,7 +62,7 @@
 
             <EditText
                 android:id="@+id/edtPhone"
-                android:hint="Số điện thoại"
+                android:hint="Số điện thoại (3-11 chữ số)"
                 android:inputType="phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,28 @@
 
             <EditText
                 android:id="@+id/edtAddress"
-                android:hint="Số nhà, tên đường, phường, quận..."
+                android:hint="Số nhà, tên đường"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <EditText
+                android:id="@+id/edtWard"
+                android:hint="Phường/Xã"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <EditText
+                android:id="@+id/edtDistrict"
+                android:hint="Quận/Huyện"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"/>
+
+            <EditText
+                android:id="@+id/edtProvince"
+                android:hint="Tỉnh/Thành phố"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"/>
