@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./api-folder
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api-folder:/app
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  android-build:
+    image: openjdk:11
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: ./gradlew assembleDebug
+
+networks:
+  default:
+    driver: bridge

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "214423269445",
+    "project_id": "dulong-sports",
+    "storage_bucket": "dulong-sports.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:214423269445:android:abc123def456",
+        "android_client_info": {
+          "package_name": "com.example.dulong"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "214423269445-h7tnkk0d89utd5uoltc0eus7vntlnug.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "214423269445-0j1ucqnuail3j7nats0ujgbtkiq3eeho.apps.googleusercontent.com",
+          "client_type": 1
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDummy_API_Key_For_Development"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "214423269445-h7tnkk0d89utd5uoltc0eus7vntlnug.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "214423269445-0j1ucqnuail3j7nats0ujgbtkiq3eeho.apps.googleusercontent.com",
+              "client_type": 1
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
